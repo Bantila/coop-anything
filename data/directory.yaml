@@ -1230,6 +1230,34 @@
   sources:
   - https://farcry1.itch.io/far-cry-advanced-version
   checked: '2026-10-16'
+- game: Far Cry
+  year: 2004
+  engine: CryEngine 1
+  project: FarCryCoop
+  url: https://github.com/Bantila/FarCryCoop/tree/game/far-cry
+  other_urls: []
+  kind: mod
+  status: alpha
+  coop_scope:
+    players_visible: yes
+    story: partial
+    enemies: yes
+    world_state: partial
+    items: per-player
+  players: 2-4
+  networking: direct-ip
+  open_source: yes
+  last_activity: 2026-10
+  qa: none
+  notes: Stock campaign maps as a listen or dedicated server; Lua mod pak plus an ASI that hooks CryGame.dll 1.4
+    (snapshot budget, area triggers for remote players). Also joins through a Steam Spacewar relay or a VPN; launcher
+    with lobby. 0.2 beta, 2 players checked by hand. No helicopters or cutscenes for clients, no saves. Public source,
+    no license file yet. Write-up in games/far-cry.
+  sources:
+  - https://github.com/Bantila/FarCryCoop/tree/game/far-cry
+  - https://github.com/Bantila/FarCryCoop/blob/game/far-cry/games/far-cry/NOTES.md
+  checked: '2026-10-21'
+  made_with_coop_anything: true
 - game: Crysis
   year: 2007
   engine: CryEngine 2
