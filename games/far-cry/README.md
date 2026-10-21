@@ -4,7 +4,7 @@
 |---|---|
 | Engine | CryEngine 1, 32-bit x86. Game logic in `CryGame.dll` (C++, source in the official MOD SDK 1.4) and Lua 4 scripts in `FCData\Scripts.pak` |
 | Versions tested | Steam, app id 13520, version 1.4.0.1405. `Bin32\FarCry.exe` SHA-256 `21a907fae0b6e2d4b10d546dba0965ef89c39a69f8cb00036307c0564ca1a813`, `CryGame.dll` SHA-256 `db9c7660b698600ae34dd4a18f7ca5989911ad51bf9286ba1cc047ae52ef7634` (PE timestamp `0x44e2f64d`). Every address below is for that `CryGame.dll` |
-| Projects | [FarCryCoop](https://github.com/Bantila/FarCryCoop/tree/game/far-cry) (new, this write-up; no license file yet); [Assault Coop](https://www.moddb.com/mods/assault-coop) (2011); [FCAV](https://farcry1.itch.io/far-cry-advanced-version) (co-op announced, not released) |
+| Projects | [FarCryCoop](https://github.com/Bantila/FarCryCoop/tree/game/far-cry) (new, this write-up; MIT); [Assault Coop](https://www.moddb.com/mods/assault-coop) (2011); [FCAV](https://farcry1.itch.io/far-cry-advanced-version) (co-op announced, not released) |
 | QA level | none (FarCryCoop: two players checked by hand by the author, no automated test); community-reports (Assault Coop) |
 | Last updated | 2026-10-21 |
 

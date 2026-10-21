@@ -1251,8 +1251,8 @@
   qa: none
   notes: Stock campaign maps as a listen or dedicated server; Lua mod pak plus an ASI that hooks CryGame.dll 1.4
     (snapshot budget, area triggers for remote players). Also joins through a Steam Spacewar relay or a VPN; launcher
-    with lobby. 0.2 beta, 2 players checked by hand. No helicopters or cutscenes for clients, no saves. Public source,
-    no license file yet. Write-up in games/far-cry.
+    with lobby. 0.2 beta, 2 players checked by hand. No helicopters or cutscenes for clients, no saves. MIT license.
+    Write-up in games/far-cry.
   sources:
   - https://github.com/Bantila/FarCryCoop/tree/game/far-cry
   - https://github.com/Bantila/FarCryCoop/blob/game/far-cry/games/far-cry/NOTES.md
