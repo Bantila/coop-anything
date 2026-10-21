@@ -15,7 +15,7 @@ FarCryCoop (0.2 beta, started 2026-10-18) runs the stock campaign maps as a netw
 - pushing physics props;
 - cutscenes for clients;
 - real saves;
-- the paraglider.
+- smooth paraglider flight as seen by other players.
 
 A full campaign has not been played through.
 
@@ -64,7 +64,7 @@ Addresses were found with Ghidra (through REA) and checked against the MOD SDK 1
 | Dedicated server only 17 snapshots/s | `Sleep` at 15.6 ms timer resolution | ASI: `timeBeginPeriod(1)` on `FarCry_WinSV` | 35-36 snapshots/s |
 | Pushed barrels never move on clients | no net presence | ASI: give net presence to `RigidBody` / `DestroyableObject` / `BasicEntity` once they move on the server | no client packet failures, respawn still works |
 | No keys with the Russian layout | CryInput builds its key table from `GetKeyboardLayout(0)` | ASI: hook it before CryInput loads, return the US layout | bindings work with the Russian layout |
-| Every player white | single-player spawn has no color, model has no mask | Lua: server sends `PCOLOR`; clients load `hero_mp.cgf`, turn on `PlayerMaskModulate` and wrap `UpdatePlayerEffectParams` | in testing |
+| Every player white | single-player spawn has no color, model has no mask | Lua: server sends `PCOLOR`; clients load `hero_mp.cgf`, turn on `PlayerMaskModulate` and wrap `UpdatePlayerEffectParams` | owner saw two different shirt colors (two instances on one PC) |
 
 Joining:
 - **Steam bridge.** It follows [playbook/networking-steam-spacewar.md](../../playbook/networking-steam-spacewar.md): a console exe running as Spacewar, using `SteamNetworkingMessages` and a UDP relay to `127.0.0.1:49011`. The ASI runs one console line from `Mods\FarCryCoop\join.txt` through `IConsole::ExecuteString`, which is vtable `+0x80`; `+0x84` is Exit.
@@ -86,7 +86,7 @@ See [INSTALL.md](https://github.com/Bantila/FarCryCoop/blob/game/far-cry/games/f
 - Helicopters fly only for the host; clients see them hanging in place.
 - A joined player cannot push barrels or crates.
 - Clients do not see cutscenes.
-- The paraglider does not work in co-op.
+- A level has one paraglider: a copy now spawns for each next player; to others a climbing glider looks as if it falls.
 - No real saves; a server restart starts the map over.
 - On a dedicated server, AI never jumps; enemies can move in small jerks on clients.
 - The short console commands (`coop_map pier`) do nothing in the game client; the `#CoopMap("pier")` form works.
