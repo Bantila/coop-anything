@@ -19,7 +19,7 @@ FarCryCoop (0.2 beta, started 2026-10-18) runs the stock campaign maps as a netw
 
 A full campaign has not been played through. A sweep of all 20 levels (two games on one PC, map changes, hops through up to 4 checkpoints per level) found:
 - 18 levels loaded at first; **Treehouse and Swamp crashed at the level load** (`CRITICAL ERROR:: ReadPacked i== 20`, [#1](https://github.com/Bantila/FarCryCoop/issues/1), now worked around: see the table below); after the workaround all 20 load, and Treehouse, Swamp, Factory, Dam and Volcano were swept again with working checkpoint hops;
-- the change **Bunker -> Steam crashes the host** (heap corruption, [#2](https://github.com/Bantila/FarCryCoop/issues/2)); the client lost once at Cooler -> Boat did not repeat;
+- a level change **sometimes crashes the host** (random heap corruption in `CrySystem.dll`: Bunker -> Steam 3 of 11 runs, Cooler -> Boat 4 of 25, [#2](https://github.com/Bantila/FarCryCoop/issues/2)); a client lost once at Cooler -> Boat did not repeat;
 - on 9 levels (Training, Carrier, Fort, Research, Bunker, Regulator, Rebellion, Archive, Cooler) both players stood at the same spot after every checkpoint hop; on Control, Pier and Fort the client was late or far at times ([#3](https://github.com/Bantila/FarCryCoop/issues/3)).
 
 **Written but not tested in game:** joining through Steam (Spacewar "Join Game"), the launcher lobby, the player shirt colors, and the F6 / F7 save keys. Everything about them below is what the code is meant to do, not something seen working.
@@ -96,7 +96,7 @@ Only direct IP / VPN with the console is checked by hand. The launcher lobby, sh
 ## Known issues
 
 - Helicopters: a client follows one once it has moved on the host; before that it hovers up to 34 m higher. A real mission flight (the Boat boss) is not seen.
-- **Bunker -> Steam crashes the host** ([#2](https://github.com/Bantila/FarCryCoop/issues/2)). Treehouse and Swamp load only because the ASI skips the physics state that their level files bake into some entities in a co-op game; those objects start where the level puts them, and what that looks like in the game is not seen ([#1](https://github.com/Bantila/FarCryCoop/issues/1), closed).
+- **A level change sometimes crashes the host** (random heap corruption; seen on Bunker -> Steam and Cooler -> Boat, [#2](https://github.com/Bantila/FarCryCoop/issues/2)). Treehouse and Swamp load only because the ASI skips the physics state that their level files bake into some entities in a co-op game; those objects start where the level puts them, and what that looks like in the game is not seen ([#1](https://github.com/Bantila/FarCryCoop/issues/1), closed).
 - After a map change the client can arrive late or far from the host ([#3](https://github.com/Bantila/FarCryCoop/issues/3)); one Lua error in the Bunker AI conversations ([#4](https://github.com/Bantila/FarCryCoop/issues/4)).
 - A joined player cannot push barrels or crates.
 - Clients do not see cutscenes.
@@ -107,7 +107,7 @@ Only direct IP / VPN with the console is checked by hand. The launcher lobby, sh
 
 ## Next steps
 
-- Fix the Bunker -> Steam crash, then repeat the sweep over all 20 levels in one run.
+- Find the random crash on a level change, then repeat the sweep over all 20 levels in one run.
 - A scripted two-client test that asserts player, AI and mission state (the monitor diff and the sweep script are a start).
 - A real helicopter flight and the paraglider as seen by clients.
 - Save the mission progress (triggers, objectives, pickups), or real engine saves on a listen-server host: bypass the multiplayer checks in `CXGame::Save`.
