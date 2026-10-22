@@ -1251,12 +1251,12 @@
   qa: none
   notes: Stock campaign maps as a listen or dedicated server; Lua mod pak plus an ASI that hooks CryGame.dll 1.4
     (snapshot budget, area triggers for remote players). Also written, but untested in game (joining through a Steam Spacewar relay,
-    the launcher lobby and player shirt colors). 0.2 beta, 2 players checked by hand. No helicopters or cutscenes for clients, no saves. MIT license.
+    the launcher lobby and player shirt colors). 0.2 beta, 2 players checked by hand. Host saves (autosave at checkpoints, save and load commands) keep players and dead enemies, not mission progress. No helicopters or cutscenes for clients. MIT license.
     Write-up in games/far-cry.
   sources:
   - https://github.com/Bantila/FarCryCoop/tree/main
   - https://github.com/Bantila/FarCryCoop/blob/main/games/far-cry/NOTES.md
-  checked: '2026-10-21'
+  checked: '2026-10-22'
   made_with_coop_anything: true
 - game: Crysis
   year: 2007
