@@ -10,14 +10,17 @@
 
 ## Where things stand
 
-FarCryCoop (0.2 beta, started 2026-10-18) runs the stock campaign maps as a network game. The host runs a listen server and plays as in single player; friends join as clients. Movement, weapons, hits on enemies, enemy AI, area triggers, mission objectives, map changes and respawn after death work for two players. The host also has campaign saves (autosave at a checkpoint, save and load commands (F6 / F7 untested), loading a save from a fresh start); they keep the players and the dead enemies, not the mission progress. Missing so far:
+FarCryCoop (0.2 beta, started 2026-10-18) runs the stock campaign maps as a network game. The host runs a listen server and plays as in single player; friends join as clients. Movement, weapons, hits on enemies, enemy AI, area triggers, mission objectives, map changes and respawn after death work for two players. The host also has campaign saves (autosave at a checkpoint, save and load commands (F6 / F7 untested), loading a save from a fresh start); they keep the players and the dead enemies, not the mission progress. The launcher lists the maps in story order and sets the difficulty (the five levels of the single-player menu). Missing so far:
 - helicopters for clients;
 - pushing physics props;
 - cutscenes for clients;
 - mission progress in saves;
 - smooth paraglider flight as seen by other players.
 
-A full campaign has not been played through.
+A full campaign has not been played through. A sweep of all 20 levels (two games on one PC, map changes, hops through up to 4 checkpoints per level) found:
+- 18 levels load; **Treehouse and Swamp crash at the level load** (`CRITICAL ERROR:: ReadPacked i== 20`, [#1](https://github.com/Bantila/FarCryCoop/issues/1));
+- the change **Bunker -> Steam crashes the host** (heap corruption, [#2](https://github.com/Bantila/FarCryCoop/issues/2)); the client lost once at Cooler -> Boat did not repeat;
+- on 9 levels (Training, Carrier, Fort, Research, Bunker, Regulator, Rebellion, Archive, Cooler) both players stood at the same spot after every checkpoint hop; on Control, Pier and Fort the client was late or far at times ([#3](https://github.com/Bantila/FarCryCoop/issues/3)).
 
 **Written but not tested in game:** joining through Steam (Spacewar "Join Game"), the launcher lobby, the player shirt colors, and the F6 / F7 save keys. Everything about them below is what the code is meant to do, not something seen working.
 
@@ -67,6 +70,7 @@ Addresses were found with Ghidra (through REA) and checked against the MOD SDK 1
 | Pushed barrels never move on clients | no net presence | ASI: give net presence to `RigidBody` / `DestroyableObject` / `BasicEntity` once they move on the server | no client packet failures, respawn still works |
 | No keys with the Russian layout | CryInput builds its key table from `GetKeyboardLayout(0)` | ASI: hook it before CryInput loads, return the US layout | bindings work with the Russian layout |
 | No saves in a network game | `CXGame::Save` and `LoadFromStream` return early in multiplayer | Lua, host only: a file `Mods\FarCryCoop\save_<name>.lua` with the map, each player's position, health, armor, weapons and ammo, the ids of dead AI and the respawn point. `Game:OnAfterSave` autosaves at a checkpoint. A load reloads the map with `LoadLevelMPServer`, removes the dead AI and puts the players back | Pier, two games on one PC: save, move both players 60 m away, load: both are back on the saved spot; a checkpoint writes `save_auto.lua`; a game started from the launcher's `save:<name>` entry puts both players on the saved spot. F6 / F7 and the single-player "Load Game" menu not tested or not connected |
+| Helicopters hang still on clients | level entities have no net presence, so a helicopter that flies on the host is not sent | ASI: a `Gunship` or `CargoChopper` gets net presence once it has moved on the server and then goes in every snapshot | Pier: the host moved two helicopters by 40 m, the client was on the same spot at the first check (gap 0 m, 28 s). A helicopter that has not moved hovers 8-34 m higher on the client. A real mission flight (the Boat boss) not seen |
 | Every player white | single-player spawn has no color, model has no mask | Lua: server sends `PCOLOR`; clients load `hero_mp.cgf`, turn on `PlayerMaskModulate` and wrap `UpdatePlayerEffectParams` | untested in game |
 
 Joining:
@@ -75,7 +79,7 @@ Joining:
 
 ## QA
 
-None automated. A Lua monitor (`coop_monitor 1`) logs players, nearby AI, vehicles and events once a second on server and client. A PowerShell diff of the two logs lists entities that are frozen, displaced or different on the client. It is a debugging aid, not an asserting test. All "works" above, except the items marked untested (Steam join, launcher lobby, shirt colors, F6 / F7), were checked with two game instances (one PC, then host and client), not with a test suite. The save check was driven by console lines sent to the running games, not by hand.
+None automated. A Lua monitor (`coop_monitor 1`) logs players, nearby AI, vehicles and events once a second on server and client. A PowerShell diff of the two logs lists entities that are frozen, displaced or different on the client. It is a debugging aid, not an asserting test. All "works" above, except the items marked untested (Steam join, launcher lobby, shirt colors, F6 / F7), were checked with two game instances (one PC, then host and client), not with a test suite. The save check, the difficulty check, the helicopter check and the level sweep were driven by console lines sent to the running games, not by hand; the sweep is a script run by the author, not a test suite.
 
 ## How to play
 
@@ -90,7 +94,9 @@ Only direct IP / VPN with the console is checked by hand. The launcher lobby, sh
 
 ## Known issues
 
-- Helicopters fly only for the host; clients see them hanging in place.
+- Helicopters: a client follows one once it has moved on the host; before that it hovers up to 34 m higher. A real mission flight (the Boat boss) is not seen.
+- **Treehouse and Swamp crash at the level load** ([#1](https://github.com/Bantila/FarCryCoop/issues/1)); **Bunker -> Steam crashes the host** ([#2](https://github.com/Bantila/FarCryCoop/issues/2)).
+- After a map change the client can arrive late or far from the host ([#3](https://github.com/Bantila/FarCryCoop/issues/3)); one Lua error in the Bunker AI conversations ([#4](https://github.com/Bantila/FarCryCoop/issues/4)).
 - A joined player cannot push barrels or crates.
 - Clients do not see cutscenes.
 - A level has one paraglider: a copy now spawns for each next player; to others a climbing glider looks as if it falls.
@@ -100,8 +106,9 @@ Only direct IP / VPN with the console is checked by hand. The launcher lobby, sh
 
 ## Next steps
 
-- A scripted two-client test that asserts player, AI and mission state (the monitor diff is a start).
-- Investigate the paraglider and helicopters for clients.
+- Fix the Treehouse / Swamp and Bunker -> Steam crashes, then repeat the sweep over all 20 levels.
+- A scripted two-client test that asserts player, AI and mission state (the monitor diff and the sweep script are a start).
+- A real helicopter flight and the paraglider as seen by clients.
 - Save the mission progress (triggers, objectives, pickups), or real engine saves on a listen-server host: bypass the multiplayer checks in `CXGame::Save`.
 - AI jumps on a dedicated server; it needs animation events without rendering.
 - Joining without Steam or a VPN (join code, UDP hole punching, relay), as the Crysis co-op mod does.
