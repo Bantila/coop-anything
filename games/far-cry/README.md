@@ -74,7 +74,7 @@ Addresses were found with Ghidra (through REA) and checked against the MOD SDK 1
 | Every player white | single-player spawn has no color, model has no mask | Lua: server sends `PCOLOR`; clients load `hero_mp.cgf`, turn on `PlayerMaskModulate` and wrap `UpdatePlayerEffectParams` | untested in game |
 
 Joining:
-- **Steam bridge (untested in game).** It follows [playbook/networking-steam-spacewar.md](../../playbook/networking-steam-spacewar.md): a console exe running as Spacewar, using `SteamNetworkingMessages` and a UDP relay to `127.0.0.1:49011`. The ASI runs one console line from `Mods\FarCryCoop\join.txt` through `IConsole::ExecuteString`, which is vtable `+0x80`; `+0x84` is Exit.
+- **Steam bridge (not tested with a real friend).** It follows [playbook/networking-steam-spacewar.md](../../playbook/networking-steam-spacewar.md): a console exe running as Spacewar, using `SteamNetworkingMessages` and a UDP relay to `127.0.0.1:49011`. The ASI runs one console line from `Mods\FarCryCoop\join.txt` through `IConsole::ExecuteString`, which is vtable `+0x80`; `+0x84` is Exit. Checked on one PC: with `-loop` a second game joined through the tunnel and stood next to the host; with the real Steam client the bridge starts as Spacewar and sets the "connect" presence once the server is up. A friend's real Join (a second Steam account on another PC) is not tested.
 - **Launcher.** Rust and Tauri. "Test on one PC" and starting from a save were run in game. The TCP lobby (untested in game) is meant to show names, shirt colors and loadouts before the start.
 
 ## QA
